@@ -1,18 +1,16 @@
 package com.bae.persistence.domain;
 
-import java.sql.Timestamp;
-
 public class AuditSearch {
 
 	private int userID;
 	private String userName;
 	private int userMemNum;
 
-	private Timestamp timestamp;
+	private String timestamp;
 
 	private String search;
 
-	public AuditSearch(int id, String username, int memnum, String search, Timestamp timestamp) {
+	public AuditSearch(int id, String username, int memnum, String search, String timestamp) {
 		this.userID = id;
 		this.userName = username;
 		this.userMemNum = memnum;
@@ -40,11 +38,11 @@ public class AuditSearch {
 		this.userMemNum = userMemNum;
 	}
 
-	public Timestamp getTimestamp() {
+	public String getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(Timestamp timestamp) {
+	public void setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
 	}
 

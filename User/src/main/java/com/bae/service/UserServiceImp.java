@@ -1,6 +1,6 @@
 package com.bae.service;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -49,12 +49,13 @@ public class UserServiceImp implements UserService {
 	@Override
 	public void logSearch(int memNum, String search) {
 		Optional<User> searchUser = repo.findByMemberNumber(memNum);
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		if (searchUser.isPresent()) {
+			User user = searchUser.get();
+			AuditSearch newSearch = new AuditSearch(user.getId(), user.getName(), user.getMemNum(), search,
+					LocalDateTime.now().toString());
+			jmsTemplate.convertAndSend("SearchQueue", newSearch);
+		}
 
-		User user = searchUser.get();
-
-		AuditSearch newSearch = new AuditSearch(user.getId(), user.getName(), user.getMemNum(), search, timestamp);
-		jmsTemplate.convertAndSend("SearchQueue", newSearch);
 	}
 
 }
