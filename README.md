@@ -4,11 +4,13 @@ This is my PokeApi. With it you can create a user, search for pokemon as that us
 
 ## Create a user:
 ### localhost:8080/pokeapi/users/create
-format: {
-   "name":"{name}",
-   "memNum":"{num}"
+format: 
+```
+{
+   "name":"{name}",   
+   "memNum":"{num}"   
 }
-
+```
 ## Get all users:
 ### localost:8082/users
 
@@ -31,6 +33,8 @@ format: {
 
 ## Other Notes:
 
-I wasn't really sure how to test with optionals being involved, as you can't create an optional object to then compare to the optional return from a function
+I wasn't really sure how to test with optionals being involved, as you can't create an optional object to then compare to the optional return from a function.
+
+The AuditConsumer runs on a MongoDB.
 
 Also, the react app doesn't do anything other than a spinning pokeball.
