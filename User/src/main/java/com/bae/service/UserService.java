@@ -15,4 +15,6 @@ public interface UserService {
 
 	public Optional<User> getByMemNum(int num);
 
+	public void logSearch(int memNum, String search);
+
 }

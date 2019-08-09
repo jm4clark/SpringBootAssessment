@@ -45,4 +45,11 @@ public class UserController {
 		return service.getByMemNum(id);
 	}
 
+	@PostMapping("/logsearch/{memnum}")
+	public String logSearch(@PathVariable("memnum") int memNum, @RequestBody String search) {
+		service.logSearch(memNum, search);
+
+		return "search logged!";
+	}
+
 }

@@ -1,12 +1,15 @@
 package com.bae.service;
 
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.bae.persistence.domain.AuditSearch;
 import com.bae.persistence.domain.User;
 import com.bae.persistence.repository.UserRepository;
 
@@ -14,13 +17,13 @@ import com.bae.persistence.repository.UserRepository;
 public class UserServiceImp implements UserService {
 	UserRepository repo;
 	RestTemplate restTemplate;
-	// JmsTemplate jmsTemplate
+	JmsTemplate jmsTemplate;
 
 	@Autowired
-	public UserServiceImp(UserRepository repo, RestTemplate rest) {
+	public UserServiceImp(UserRepository repo, RestTemplate rest, JmsTemplate jms) {
 		this.repo = repo;
 		this.restTemplate = rest;
-		// this.jmsTempalte = jms;
+		this.jmsTemplate = jms;
 	}
 
 	@Override
@@ -41,6 +44,17 @@ public class UserServiceImp implements UserService {
 	@Override
 	public Optional<User> getByMemNum(int num) {
 		return repo.findByMemberNumber(num);
+	}
+
+	@Override
+	public void logSearch(int memNum, String search) {
+		Optional<User> searchUser = repo.findByMemberNumber(memNum);
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+		User user = searchUser.get();
+
+		AuditSearch newSearch = new AuditSearch(user.getId(), user.getName(), user.getMemNum(), search, timestamp);
+		jmsTemplate.convertAndSend("SearchQueue", newSearch);
 	}
 
 }
