@@ -1,6 +1,9 @@
 package com.bae.service;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -53,5 +56,13 @@ public class CoreServiceImp implements CoreService {
 		rest.postForObject("http://localhost:8082/users/logsearch/" + memnum, search, String.class);
 
 		return searchByName(search);
+	}
+
+	@Override
+	public Collection<Object> getAllSearches() {
+		ResponseEntity<Collection<Object>> allSearches = rest.exchange("http://localhost:8085/audits/getAllSearches",
+				HttpMethod.GET, null, new ParameterizedTypeReference<Collection<Object>>() {
+				});
+		return allSearches.getBody();
 	}
 }
